@@ -9,10 +9,10 @@ public  class LevelScript : MonoBehaviour {
 	// Use this for initialization
     void Start()
     {
-        Difficalt = 0.9f;
+        Difficalt = 0.4f;
         GameObject GridObject = Instantiate(Resources.Load("Prefab/Grid", typeof(GameObject))) as GameObject;
         MainGrid = GridObject.GetComponent<Grid>();
-        Debug.Log("Lvl");
+        //Debug.Log("Lvl");
         MainGrid.GenarateGrid(Type);
        
 	}

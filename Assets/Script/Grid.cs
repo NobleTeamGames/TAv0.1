@@ -42,6 +42,7 @@ public class Grid : MonoBehaviour
         Widht = Convert.ToInt16(Stats.GetAttribute("width"));
 
         BlockGrid = new Block[Height + 2, Widht];
+       // BlockGrid[0, 30] = new Block();
         TreesGrid = new Resource[Widht];
 
         XmlElement Lvl = xmlDoc.GetElementById("1");
@@ -150,7 +151,7 @@ public class Grid : MonoBehaviour
                 Instantiate(Resources.Load("Prefab/Ground"), new Vector3(j, -i - 1, 0), Quaternion.identity);
         }
         for (int i = -Widht / 2 - 4; i <= Widht / 2 + 3; i++)
-            for (int j = Height; j <= Height + 4; j++)
+            for (int j = Height+1; j <= Height + 4; j++)
                 Instantiate(Resources.Load("Prefab/Ground"), new Vector3(i, -j, 0), Quaternion.identity);
     }
 
@@ -171,17 +172,25 @@ public class Grid : MonoBehaviour
             {
                 if (y + _y <= Height && _x + x + 15 < Widht)
                 {
+                   
                     if (BlockGrid[y + _y, _x + x + 15])
                     {
                         NoWay = true;
+                        CleanResourse(Size, _y, _x, y, x);
+                        break;
                     }
-                    Now = Instantiate(Resources.Load("Prefab/" + _Name), new Vector3(_x + x, -(y + _y), 0), Quaternion.identity) as GameObject;
-                    BlockGrid[y + _y, _x + x + 15] = Now.GetComponent<Resource>();
-                    BlockGrid[y + _y, _x + x + 15].gameObject.transform.parent = this.gameObject.transform;
+                    else
+                    {                      
+                        Now = Instantiate(Resources.Load("Prefab/" + _Name), new Vector3(_x + x, -(y + _y), 0), Quaternion.identity) as GameObject;
+                        BlockGrid[y + _y, _x + x + 15] = Now.GetComponent<Resource>();
+                        BlockGrid[y + _y, _x + x + 15].gameObject.transform.parent = this.gameObject.transform;
+                    }
                 }
                 else
                 {
+                    //Debug.Log((y + _y) + " <=" + Height);
                     NoWay = true;
+                    ClenResoursesOverZone(Size, _y, _x, y, x);
                     break;
                 }
             }
@@ -190,26 +199,78 @@ public class Grid : MonoBehaviour
                 break;
         }
 
-        if (NoWay)
-        {
-            for (int y = 0; y < Size; y++)
-            {
-                for (int x = 0; x < Size; x++)
-                {
-                    if (y + _y <= Height && _x + x + 15 < Widht)
-                    {
-                        if (BlockGrid[y + _y, _x + x + 15])
-                            Destroy(BlockGrid[y + _y, _x + x + 15].gameObject);
-                        // BlockGrid[y + _y, _x + x + 15].gameObject.SetActive(false);
+       
 
-                        Now = Instantiate(Resources.Load("Prefab/Ground"), new Vector3(_x + x, -(y + _y), 0), Quaternion.identity) as GameObject;
+
+    }
+
+
+    private void CleanResourse(int Size, int _y, int _x, int _yEnd, int _xEnd)
+    {
+        for (int y = 0; y <= _yEnd; y++)
+        {
+            for (int x = 0; x < Size; x++)
+            {
+                if (y <= _yEnd && x < _xEnd)
+                {
+                    if (BlockGrid[y + _y, _x + x + 15])
+                    {
+                        //Debug.Log("del");
+                        Destroy(BlockGrid[y + _y, _x + x + 15].gameObject);
+                        GameObject Now = Instantiate(Resources.Load("Prefab/Ground"), new Vector3(_x + x, -(y + _y), 0), Quaternion.identity) as GameObject;
+                        BlockGrid[y + _y, _x + x + 15] = Now.GetComponent<Ground>();
+                        BlockGrid[y + _y, _x + x + 15].gameObject.transform.parent = this.gameObject.transform;
+                    }                   
+                    //if (BlockGrid[y + _y, _x + x + 15])
+                    //    Destroy(BlockGrid[y + _y, _x + x + 15].gameObject);
+                    // BlockGrid[y + _y, _x + x + 15].gameObject.SetActive(false);
+
+                    /*Now = Instantiate(Resources.Load("Prefab/Ground"), new Vector3(_x + x, -(y + _y), 0), Quaternion.identity) as GameObject;
+                    BlockGrid[y + _y, _x + x + 15] = Now.GetComponent<Ground>();
+                    BlockGrid[y + _y, _x + x + 15].gameObject.transform.parent = this.gameObject.transform;*/
+                }
+                //else
+                   // Debug.Log("Notdel");
+            }
+        }
+        //sDebug.Log("2");
+    }
+
+    private void ClenResoursesOverZone(int Size, int _y, int _x, int _yEnd, int _xEnd)
+    {
+        for (int y = 0; y < Size; y++)
+        {
+            for (int x = 0; x < Size; x++)
+            {
+               // Debug.Log((y + _y) + ">=" + Height + "-" + (_x + x + 15) + ">=" + Widht);
+                if (y + _y > Height || _x + x + 15 >= Widht)
+                {
+                    //Debug.Log((y + _y) + ">=" + Height + "-" + (_x + x + 15) + ">=" + Widht);  || x + 15 >= Widht
+                   // Debug.Log("Out");
+                    //   if (BlockGrid[y + _y, _x + x + 15])
+                    //  {
+                    //Debug.Log("del");
+                    //      Destroy(BlockGrid[y + _y, _x + x + 15].gameObject);
+                    //GameObject Now = Instantiate(Resources.Load("Prefab/Ground"), new Vector3(_x + x, -(y + _y), 0), Quaternion.identity) as GameObject;
+                    //BlockGrid[y + _y, _x + x + 15] = Now.GetComponent<Ground>();
+                    //BlockGrid[y + _y, _x + x + 15].gameObject.transform.parent = this.gameObject.transform;
+                    //  }
+
+                }
+                else
+                {
+                    if (BlockGrid[y + _y, _x + x + 15])
+                    {
+                        Debug.Log((y + _y) + "<" + Height + "-" + (_x + x + 15) + "<" + Widht);
+                        Debug.Log("del");
+                        Destroy(BlockGrid[y + _y, _x + x + 15].gameObject);
+                        GameObject Now = Instantiate(Resources.Load("Prefab/Ground"), new Vector3(_x + x, -(y + _y), 0), Quaternion.identity) as GameObject;
                         BlockGrid[y + _y, _x + x + 15] = Now.GetComponent<Ground>();
                         BlockGrid[y + _y, _x + x + 15].gameObject.transform.parent = this.gameObject.transform;
                     }
                 }
             }
         }
-
-
     }
+
 }
