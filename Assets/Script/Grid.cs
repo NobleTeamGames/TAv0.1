@@ -27,12 +27,12 @@ public class Grid : MonoBehaviour
 
     }
 
-    public void GenarateGrid(string Type)
+    public void GenarateGrid(string type, float difficult )
     {
 
         float Rand = 0f;                                        //Рандомная величина
         GameObject Now;                                        //Переменная для поиска спаунящегося блока
-        TextAsset xmlAsset = Resources.Load("LevelStats/" + Type) as TextAsset; //Считываня xml
+        TextAsset xmlAsset = Resources.Load("LevelStats/" + type) as TextAsset; //Считываня xml
         XmlDocument xmlDoc = new XmlDocument();
         if (xmlAsset)
             xmlDoc.LoadXml(xmlAsset.text);
@@ -89,7 +89,7 @@ public class Grid : MonoBehaviour
                         break;
 
                     default:
-                        if (UnityEngine.Random.value <= LevelScript.Difficalt)
+                        if (UnityEngine.Random.value <= difficult)
                         {
                             if (!BlockGrid[i, x + 15])
                             {

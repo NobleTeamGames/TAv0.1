@@ -5,15 +5,14 @@ public  class LevelScript : MonoBehaviour {
 
     public static string Type = "Level";
     public static Grid MainGrid;
-    public static float Difficalt;
+    public float Difficult;
 	// Use this for initialization
     void Start()
     {
-        Difficalt = 0.4f;
         GameObject GridObject = Instantiate(Resources.Load("Prefab/Grid", typeof(GameObject))) as GameObject;
         MainGrid = GridObject.GetComponent<Grid>();
         //Debug.Log("Lvl");
-        MainGrid.GenarateGrid(Type);
+        MainGrid.GenarateGrid(Type, Difficult);
        
 	}
 	
