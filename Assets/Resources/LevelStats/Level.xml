@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <document>
 <Location height="9" width="30">Forest</Location>
   <level ID="1">
@@ -14,3 +15,20 @@
 
 
 
+=======
+<document>
+<Location height="9" width="30">Steppe</Location>
+  <level ID="1">
+      <Gas Rand="0.3" Rang="3-6" With="2,3"/>
+      <Coal Rand="0.2" Rang="3-9" With="2,3"/>
+      <Water Rand ="0.3" Rang="6-9" With="2,3"/>
+
+  </level>
+  <Tree Indent="2"/>
+</document>
+
+
+
+
+
+>>>>>>> a5951c37d21f8da47a75245de54e720ec3040c2d
