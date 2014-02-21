@@ -15,19 +15,22 @@ public class Grid : MonoBehaviour
     public Resource[] TreesGrid;
 
 
+
+    private GameObject Background;
+
     // Use this for initialization
     void Start()
     {
-
+        Background = Instantiate(Resources.Load("Prefab/Forest"), new Vector3(0, 2.5f, 0), Quaternion.identity) as GameObject;     
     }
 
     // Update is called once per frame
     void Update()
     {
-
+        Background.transform.position = new Vector3(Camera.main.transform.position.x, 2.5f, 0f);
     }
 
-    public void GenarateGrid(string Type)
+    public void GenarateGrid(string Type ,float Difficalt)
     {
 
         float Rand = 0f;                                        //Рандомная величина
@@ -54,31 +57,19 @@ public class Grid : MonoBehaviour
                 switch (i)
                 {
                     case -1:
-                        if (UnityEngine.Random.value < 0.2f)
+                        if (UnityEngine.Random.value < Convert.ToSingle(xmlDoc.DocumentElement.SelectSingleNode("//Tree").Attributes[1].Value) && x<=0)
                         {
-
+                            
                             int Indent = Convert.ToInt16(xmlDoc.DocumentElement.SelectSingleNode("//Tree").Attributes[0].Value);
-                            // Debug.Log(Indent);
-                            bool CanCreate = false;
-                            if (x + 15 - Indent >= 0)
-                                for (int j = -Indent; j <= Indent; j++)
-                                {
-                                    if (x + 15 + j < 30 && !TreesGrid[x + 15 + j])
-                                        CanCreate = true;
-                                    else
-                                    {
-                                        CanCreate = false;
-                                        break;
-                                    }
-                                }
-
-                            if (CanCreate)
-                            {
-                                Now = Instantiate(Resources.Load("Prefab/Tree"), new Vector3(x, -i, 0), Quaternion.identity) as GameObject;
-                                TreesGrid[x + 15] = Now.GetComponent<Resource>();
-                                TreesGrid[x + 15].gameObject.transform.parent = this.gameObject.transform;
-                            }
+                            GenerateTree(Indent, x, i);
+                            // Debug.Log(Indent);                          
                         }
+                        else
+                            if (UnityEngine.Random.value < Convert.ToSingle(xmlDoc.DocumentElement.SelectSingleNode("//Tree").Attributes[1].Value) / 2f)
+                            {
+                                int Indent = Convert.ToInt16(xmlDoc.DocumentElement.SelectSingleNode("//Tree").Attributes[0].Value);
+                                GenerateTree(Indent, x, i);
+                            }
                         break;
 
 
@@ -89,7 +80,7 @@ public class Grid : MonoBehaviour
                         break;
 
                     default:
-                        if (UnityEngine.Random.value <= LevelScript.Difficalt)
+                        if (UnityEngine.Random.value <= Difficalt)
                         {
                             if (!BlockGrid[i, x + 15])
                             {
@@ -131,28 +122,11 @@ public class Grid : MonoBehaviour
                 }
 
             }
-
+            GenerateZone();
 
         }
 
-        Instantiate(Resources.Load("Prefab/GroundUp"), new Vector3(Widht / 2, 0, 0), Quaternion.identity);
-        Instantiate(Resources.Load("Prefab/GroundUp"), new Vector3(Widht / 2 + 1, 0, 0), Quaternion.identity);
-        Instantiate(Resources.Load("Prefab/GroundUp"), new Vector3(Widht / 2 + 2, 0, 0), Quaternion.identity);
-        Instantiate(Resources.Load("Prefab/GroundUp"), new Vector3(Widht / 2 + 3, 0, 0), Quaternion.identity);
-        Instantiate(Resources.Load("Prefab/GroundUp"), new Vector3(-Widht / 2 - 1, 0, 0), Quaternion.identity);
-        Instantiate(Resources.Load("Prefab/GroundUp"), new Vector3(-Widht / 2 - 2, 0, 0), Quaternion.identity);
-        Instantiate(Resources.Load("Prefab/GroundUp"), new Vector3(-Widht / 2 - 3, 0, 0), Quaternion.identity);
-        Instantiate(Resources.Load("Prefab/GroundUp"), new Vector3(-Widht / 2 - 4, 0, 0), Quaternion.identity);
-        for (int i = 0; i < Height; i++)
-        {
-            for (int j = -Widht / 2 - 1 - 3; j <= -Widht / 2 - 1; j++)
-                Instantiate(Resources.Load("Prefab/Ground"), new Vector3(j, -i - 1, 0), Quaternion.identity);
-            for (int j = Widht / 2; j <= Widht / 2 + 3; j++)
-                Instantiate(Resources.Load("Prefab/Ground"), new Vector3(j, -i - 1, 0), Quaternion.identity);
-        }
-        for (int i = -Widht / 2 - 4; i <= Widht / 2 + 3; i++)
-            for (int j = Height+1; j <= Height + 4; j++)
-                Instantiate(Resources.Load("Prefab/Ground"), new Vector3(i, -j, 0), Quaternion.identity);
+        
     }
 
     private void GenerateResourse(int _y, int _x, string _Size, string _Name)
@@ -203,7 +177,6 @@ public class Grid : MonoBehaviour
 
 
     }
-
 
     private void CleanResourse(int Size, int _y, int _x, int _yEnd, int _xEnd)
     {
@@ -261,8 +234,8 @@ public class Grid : MonoBehaviour
                 {
                     if (BlockGrid[y + _y, _x + x + 15])
                     {
-                        Debug.Log((y + _y) + "<" + Height + "-" + (_x + x + 15) + "<" + Widht);
-                        Debug.Log("del");
+                      //  Debug.Log((y + _y) + "<" + Height + "-" + (_x + x + 15) + "<" + Widht);
+                     //   Debug.Log("del");
                         Destroy(BlockGrid[y + _y, _x + x + 15].gameObject);
                         GameObject Now = Instantiate(Resources.Load("Prefab/Ground"), new Vector3(_x + x, -(y + _y), 0), Quaternion.identity) as GameObject;
                         BlockGrid[y + _y, _x + x + 15] = Now.GetComponent<Ground>();
@@ -273,4 +246,49 @@ public class Grid : MonoBehaviour
         }
     }
 
+    private void GenerateTree(int Indent, int x, int i)
+    {
+        GameObject Now;
+        bool CanCreate = false;
+        if (x + 15 - Indent >= 0)
+            for (int j = -Indent; j <= Indent; j++)
+            {
+                if (x + 15 + j < 30 && !TreesGrid[x + 15 + j])
+                    CanCreate = true;
+                else
+                {
+                    CanCreate = false;
+                    break;
+                }
+            }
+
+        if (CanCreate)
+        {
+            Now = Instantiate(Resources.Load("Prefab/Tree"), new Vector3(x, -i, 0), Quaternion.identity) as GameObject;
+            TreesGrid[x + 15] = Now.GetComponent<Resource>();
+            TreesGrid[x + 15].gameObject.transform.parent = this.gameObject.transform;
+        }
+    }
+
+    private void GenerateZone()
+    {
+        Instantiate(Resources.Load("Prefab/GroundUp"), new Vector3(Widht / 2, 0, 0), Quaternion.identity);
+        Instantiate(Resources.Load("Prefab/GroundUp"), new Vector3(Widht / 2 + 1, 0, 0), Quaternion.identity);
+        Instantiate(Resources.Load("Prefab/GroundUp"), new Vector3(Widht / 2 + 2, 0, 0), Quaternion.identity);
+        Instantiate(Resources.Load("Prefab/GroundUp"), new Vector3(Widht / 2 + 3, 0, 0), Quaternion.identity);
+        Instantiate(Resources.Load("Prefab/GroundUp"), new Vector3(-Widht / 2 - 1, 0, 0), Quaternion.identity);
+        Instantiate(Resources.Load("Prefab/GroundUp"), new Vector3(-Widht / 2 - 2, 0, 0), Quaternion.identity);
+        Instantiate(Resources.Load("Prefab/GroundUp"), new Vector3(-Widht / 2 - 3, 0, 0), Quaternion.identity);
+        Instantiate(Resources.Load("Prefab/GroundUp"), new Vector3(-Widht / 2 - 4, 0, 0), Quaternion.identity);
+        for (int i = 0; i < Height; i++)
+        {
+            for (int j = -Widht / 2 - 1 - 3; j <= -Widht / 2 - 1; j++)
+                Instantiate(Resources.Load("Prefab/Ground"), new Vector3(j, -i - 1, 0), Quaternion.identity);
+            for (int j = Widht / 2; j <= Widht / 2 + 3; j++)
+                Instantiate(Resources.Load("Prefab/Ground"), new Vector3(j, -i - 1, 0), Quaternion.identity);
+        }
+        for (int i = -Widht / 2 - 4; i <= Widht / 2 + 3; i++)
+            for (int j = Height + 1; j <= Height + 4; j++)
+                Instantiate(Resources.Load("Prefab/Ground"), new Vector3(i, -j, 0), Quaternion.identity);
+    }
 }

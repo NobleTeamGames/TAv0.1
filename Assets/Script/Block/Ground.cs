@@ -5,11 +5,12 @@ public class Ground : Block {
 
 	// Use this for initialization
 	void Start () {
-	    //gameObject.collider.
+        base.Start();    
 	}
 	
 	// Update is called once per frame
 	void Update () {
 	
 	}
+  
 }

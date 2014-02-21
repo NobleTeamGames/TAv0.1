@@ -45,15 +45,17 @@ public class CameraController : MonoBehaviour {
         MaxHeight = -(Convert.ToInt16(Stats.GetAttribute("height")) + 0.5f);
         MaxWidht = Convert.ToInt16(Stats.GetAttribute("width")) / 2f + 0.5f;
 
+        Debug.Log(MaxWidht + "  " + MaxHeight);
         //Смена размера камеры в зависимости от разрещения
-        camera.orthographicSize = (MaxWidht*2 - 1) * (1 - MaxUp) / (camera.aspect * 2);
+        camera.orthographicSize = -(MaxHeight-MaxSky) / 2f; //(MaxWidht*2 - 1) * (1 - MaxUp) / (camera.aspect * 2);
         defaultOrtSize = camera.orthographicSize;
 
         height = 2 * camera.orthographicSize;
         width = height * camera.aspect;
         
-        Zoom = 1;
+        Zoom = 0;
 
+        Debug.Log(camera.orthographicSize);
         //Установка камеры в позицию по умолчанию
         this.gameObject.transform.position = new Vector3(this.gameObject.transform.position.x, MaxHeight + camera.orthographicSize, this.gameObject.transform.position.z);
     }
@@ -61,7 +63,7 @@ public class CameraController : MonoBehaviour {
     // Update is called once per frame
     void Update()
     {
-        Vector3 translation = Vector3.zero;             //Перемещение кнопкой миши
+        var translation = Vector3.zero;             //Перемещение кнопкой миши
         if (Input.GetMouseButton(0)) // MMB
         {
             // Hold button and drag camera around
@@ -73,22 +75,11 @@ public class CameraController : MonoBehaviour {
          * Перемещение = 0 при преувеличении размеров
          * 
          * */
-        if (camera.transform.position.x + translation.x + width / 2 > MaxWidht || camera.transform.position.x + translation.x - width / 2 < -MaxWidht - 1)
-        {
-            translation.x = 0;
-        }
+        cameraCorrect(translation);
 
-        if (camera.transform.position.y + translation.y + height / 2 > MaxSky || camera.transform.position.y + translation.y - height / 2 < MaxHeight)
-            translation.y = 0;
-        camera.transform.position += translation / (Zoom + 1);
-
-    }
-
-    void LateUpdate()
-    {      
-        height = 2 * camera.orthographicSize; //Определение новой высоты и ширины камеры
+        translation = Vector3.zero;
+        height = camera.orthographicSize * 2;
         width = height * camera.aspect;
-        Vector3 translation = Vector3.zero;   
         /*
          * Зумирование колесом миши
          * 
@@ -98,6 +89,49 @@ public class CameraController : MonoBehaviour {
          * 
          * 
          * */
+        var Wheel = Input.GetAxis("Mouse ScrollWheel");
+        if (Wheel != 0)
+        {
+            if (!(Wheel > 0 && Zoom + Wheel <= MinZoom) && !(Wheel < 0 && Zoom + Wheel >= 0))
+                return;
+
+
+            Zoom += Wheel;
+            camera.orthographicSize = defaultOrtSize * Mathf.Pow(2, (Zoom) * -1);
+            if (Wheel > 0)
+            {
+                var mousePos = camera.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, camera.transform.position.z));
+                var dragOrigin = camera.ScreenToWorldPoint(new Vector3(Screen.width / 2, Screen.height / 2, camera.transform.position.z));
+                translation.y = translation.y + ((mousePos.y - dragOrigin.y) / (camera.orthographicSize * 2));
+                translation.x = translation.x + ((mousePos.x - dragOrigin.x) / (camera.orthographicSize * 2));
+            }
+            else
+            {
+                var mousePos = camera.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, camera.transform.position.z));
+                var dragOrigin = camera.ScreenToWorldPoint(new Vector3(Screen.width / 2, Screen.height / 2, camera.transform.position.z));
+                translation.y = translation.y - ((mousePos.y - dragOrigin.y) / (camera.orthographicSize * 2));
+                translation.x = translation.x - ((mousePos.x - dragOrigin.x) / (camera.orthographicSize * 2));
+            }
+            cameraCorrect(translation);
+        }
+        
+
+    }
+
+   /* void LateUpdate()
+    {      
+        height = 2 * camera.orthographicSize; //Определение новой высоты и ширины камеры
+        width = height * camera.aspect;
+        Vector3 translation = Vector3.zero;   
+        
+         * Зумирование колесом миши
+         * 
+         * И проверка на изменение зума
+         * дабы не изменять ортогональный размер лишний раз
+         * 
+         * 
+         * 
+         * 
         float Wheel = Input.GetAxis("Mouse ScrollWheel");
         if (Wheel != 0)
         {
@@ -144,7 +178,7 @@ public class CameraController : MonoBehaviour {
 
 
 
-        /*
+        
          * Ниже идет смещение камеры при преувеличении границ экрана
          * 
          * * MaxDragSpeed * Time.deltaTime
@@ -153,7 +187,7 @@ public class CameraController : MonoBehaviour {
          * 
          * 
          * 
-         * */
+         * 
         if (camera.transform.position.x - width / 2 < -MaxWidht)
         {
             camera.transform.position += new Vector3(-MaxWidht - (camera.transform.position.x - width / 2), 0, 0) * Time.deltaTime  * 10;
@@ -183,8 +217,28 @@ public class CameraController : MonoBehaviour {
         }
 
 
+    }*/
+
+    private void cameraCorrect(Vector3 translation)
+    {
+        var _position = camera.transform.position;
+        if (_position.x + translation.x + width / 2 >= MaxWidht - 1)
+            translation.x = MaxWidht - 1 - _position.x - width / 2;
+        else if (_position.x + translation.x - width / 2 <= -MaxWidht)
+            translation.x = -MaxWidht - _position.x + width / 2;
+
+        if (_position.y + translation.y + height / 2 > MaxSky)
+        {
+            Debug.Log("1");
+            translation.y = MaxSky - _position.y - height / 2;
+        }
+        else if (_position.y + translation.y - height / 2 < MaxHeight)
+        {
+            Debug.Log("2");
+            translation.y = MaxHeight - _position.y + height / 2;
+        }
+        _position += translation / (Zoom + 1);
+        camera.transform.position = _position;
     }
-
-
     
 }
