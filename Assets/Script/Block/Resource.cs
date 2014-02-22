@@ -1,5 +1,4 @@
-<<<<<<< HEAD
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 
 public class Resource : Block
@@ -15,21 +14,3 @@ public class Resource : Block
 	
 	}
 }
-=======
-﻿using UnityEngine;
-using System.Collections;
-
-public class Resource : Block
-{
-
-	// Use this for initialization
-	void Start () {
-	
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
-}
->>>>>>> a5951c37d21f8da47a75245de54e720ec3040c2d

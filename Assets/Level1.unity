@@ -103,11 +103,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3f354b13050d3094cb99940bedd5b205, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-<<<<<<< HEAD
-  Difficalt: 0
-=======
-  Difficult: .899999976
->>>>>>> a5951c37d21f8da47a75245de54e720ec3040c2d
+  Difficalt: .899999976
 --- !u!4 &426115686
 Transform:
   m_ObjectHideFlags: 0
@@ -225,10 +221,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Zoom: 0
-  height: 0
-  width: 0
-  MaxHeight: 0
-  MaxWidht: 0
   MaxUp: .333333343
   MaxDragSpeed: 20
 --- !u!1001 &1496617137
@@ -269,18 +261,6 @@ Prefab:
     - target: {fileID: 100000, guid: 1bd4a3bb257267a4f82b16834e885813, type: 2}
       propertyPath: m_IsActive
       value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 11400000, guid: 1bd4a3bb257267a4f82b16834e885813, type: 2}
-      propertyPath: m_Enabled
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 11400000, guid: 1bd4a3bb257267a4f82b16834e885813, type: 2}
-      propertyPath: Object
-      value: 
-      objectReference: {fileID: 426115684}
-    - target: {fileID: 11400000, guid: 1bd4a3bb257267a4f82b16834e885813, type: 2}
-      propertyPath: Difficult
-      value: .899999976
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 1bd4a3bb257267a4f82b16834e885813, type: 2}
