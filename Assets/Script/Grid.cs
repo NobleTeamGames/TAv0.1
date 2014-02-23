@@ -271,7 +271,7 @@ public class Grid : MonoBehaviour
 
     private void GenerateTree(List<Vector2> TreeCoords)
     {
-        Debug.Log(TreeCoords.Count);
+       // Debug.Log(TreeCoords.Count);
         GameObject Now;
         TreesGrid = new Resource[TreeCoords.Count];
         for (int i = 0; i < TreeCoords.Count; i++)

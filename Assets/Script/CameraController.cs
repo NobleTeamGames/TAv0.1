@@ -45,7 +45,7 @@ public class CameraController : MonoBehaviour {
         MaxHeight = -(Convert.ToInt16(Stats.GetAttribute("height")) + 0.5f);
         MaxWidht = Convert.ToInt16(Stats.GetAttribute("width")) / 2f + 0.5f;
 
-        Debug.Log(MaxWidht + "  " + MaxHeight);
+        //Debug.Log(MaxWidht + "  " + MaxHeight);
         //Смена размера камеры в зависимости от разрещения
         camera.orthographicSize = -(MaxHeight-MaxSky) / 2f; //(MaxWidht*2 - 1) * (1 - MaxUp) / (camera.aspect * 2);
         defaultOrtSize = camera.orthographicSize;
@@ -55,7 +55,7 @@ public class CameraController : MonoBehaviour {
         
         Zoom = 0;
 
-        Debug.Log(camera.orthographicSize);
+       // Debug.Log(camera.orthographicSize);
         //Установка камеры в позицию по умолчанию
         this.gameObject.transform.position = new Vector3(this.gameObject.transform.position.x, MaxHeight + camera.orthographicSize, this.gameObject.transform.position.z);
     }
@@ -128,15 +128,10 @@ public class CameraController : MonoBehaviour {
             translation.x = -MaxWidht - _position.x + width / 2;
 
         if (_position.y + translation.y + height / 2 > MaxSky)
-        {
-            Debug.Log("1");
             translation.y = MaxSky - _position.y - height / 2;
-        }
         else if (_position.y + translation.y - height / 2 < MaxHeight)
-        {
-            Debug.Log("2");
             translation.y = MaxHeight - _position.y + height / 2;
-        }
+
         _position += translation / (Zoom + 1);
         camera.transform.position = _position;
     }

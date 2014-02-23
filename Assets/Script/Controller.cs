@@ -64,7 +64,7 @@ public class Controller : MonoBehaviour {
     {
          if (Input.GetMouseButtonDown(0))
                 {
-                    Debug.ClearDeveloperConsole();
+                    //Debug.ClearDeveloperConsole();
                     StartClickTime = Time.time;
                     StartVec2 = new Vector2(Camera.main.ScreenToWorldPoint(Input.mousePosition).x, Camera.main.ScreenToWorldPoint(Input.mousePosition).y);
                     NowClic = true;
@@ -81,7 +81,11 @@ public class Controller : MonoBehaviour {
                 {
 
                     if (Convert.ToInt16(-StartVec2.y) <= LevelScript.MainGrid.Height && Convert.ToInt16(-StartVec2.y) >= 0)
+                    {
+                        //LevelScript.MainGrid.BlockGrid[Convert.ToInt16(-StartVec2.y), Convert.ToInt16(StartVec2.x) + 15].BlocksArownd(new Vector2(Convert.ToInt16(-StartVec2.y), Convert.ToInt16(StartVec2.x) + 15));
                         LevelScript.MainGrid.BlockGrid[Convert.ToInt16(-StartVec2.y), Convert.ToInt16(StartVec2.x) + 15].DestroyBlock();
+                        //LevelScript.MainGrid.BlockGrid[Convert.ToInt16(-StartVec2.y), Convert.ToInt16(StartVec2.x) + 15].ChangeWall();
+                    }
 
 
                     //Debug.Log(Convert.ToInt16(StartVec2.x) +" "+ Convert.ToInt16(StartVec2.y));
@@ -100,7 +104,7 @@ public class Controller : MonoBehaviour {
 
         if (Input.GetMouseButtonDown(0))
         {
-            Debug.ClearDeveloperConsole();
+           // Debug.ClearDeveloperConsole();
             StartClickTime = Time.time;
             StartVec2 = new Vector2(Camera.main.ScreenToWorldPoint(Input.mousePosition).x, Camera.main.ScreenToWorldPoint(Input.mousePosition).y);
             NowClic = true;
@@ -117,6 +121,7 @@ public class Controller : MonoBehaviour {
         {
 
             if (Convert.ToInt16(-StartVec2.y) <= LevelScript.MainGrid.Height && Convert.ToInt16(-StartVec2.y) >= 0)
+                //LevelScript.MainGrid.BlockGrid[Convert.ToInt16(-StartVec2.y), Convert.ToInt16(StartVec2.x) + 15].SetWall();
                 LevelScript.MainGrid.BlockGrid[Convert.ToInt16(-StartVec2.y), Convert.ToInt16(StartVec2.x) + 15].ChangeWall();
 
 

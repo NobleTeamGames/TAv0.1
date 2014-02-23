@@ -6,7 +6,8 @@ public class Resource : Block
 
 	// Use this for initialization
 	void Start () {
-        base.Start();   
+        base.Start();
+        NowType = Type.Resource;
 	}
 	
 	// Update is called once per frame
