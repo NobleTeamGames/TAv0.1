@@ -5,7 +5,7 @@ public  class LevelScript : MonoBehaviour {
 
     public static string Type = "Level";
     public static Grid MainGrid;
-    public float Difficalt = 0.9f;
+    public float Difficalt;
 	// Use this for initialization
     void Start()
     {
