@@ -8,6 +8,8 @@ using Assets.Utilities;
 public class Fabric : MonoBehaviour {
 
     public int SecondsWait;
+    public int MaxHealth;
+    public int MaxArmor;
 
     private Mod.Resource _plus = new Mod.Resource(5, 0, 0, 0, 0, 0, 0);
     private int _worker;
@@ -17,6 +19,8 @@ public class Fabric : MonoBehaviour {
     private float StartClickTime;
     private Timer _startTimer;
     private Mod.Resource _price = new Mod.Resource(0, 0, 100, 0, 0, 300, 0);
+    private int _health;
+    private int _armor;
 
 	// Use this for initialization
     void Start()
@@ -25,6 +29,8 @@ public class Fabric : MonoBehaviour {
         _stat = gameObject.transform.parent.gameObject.GetComponent<GamerStatistick>();
         _startTimer = new Timer(SecondsWait * 1000);
         _startTimer.Elapsed += (s, e) => { ReCalculate(); };
+        _health = MaxHealth;
+        _armor = MaxArmor;
     }
 
     void Update()
@@ -59,5 +65,43 @@ public class Fabric : MonoBehaviour {
     void ReCalculate()
     {
         _stat.SetResources(_plus);
+    }
+
+    public void AddHealth(int heal)
+    {
+        if (MaxHealth - _health > heal)
+            _health += heal;
+        else 
+            _health = MaxHealth;
+    }
+
+    public void AddArmor(int armor)
+    {
+        if (MaxArmor - _armor > armor)
+            _armor += armor;
+        else 
+            _armor = MaxArmor;
+    }
+    
+    public void RemHealth(int damage)
+    {
+        if (_armor > 0)
+            RemArmor(damage);
+        else if (_health > damage)
+            _health -= damage;
+        else
+            _health = 0;
+
+    }
+     public void RemArmor(int damage)
+    {
+        if (_armor > damage)
+            _armor -= damage;
+        else
+        {
+            damage -= _armor;
+            _armor = 0;
+            RemHealth(damage);
+        }
     }
 }

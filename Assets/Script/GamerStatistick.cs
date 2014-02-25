@@ -34,7 +34,7 @@ public class GamerStatistick : MonoBehaviour {
 
         if (GUI.Button(new Rect(10, 30, 150, 20), "Добавить Здание"))
         {
-            var child = Instantiate(Resources.Load("Prefab/fabric")) as GameObject;
+            var child = Instantiate(Resources.Load("Prefab/WaterFabric")) as GameObject;
             child.name = "WaterFabric";
             child.transform.parent = this.transform;
         }
