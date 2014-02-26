@@ -115,6 +115,45 @@ public class Block : MonoBehaviour
         {
             RemoveWall(j);
         }
+
+        //Debug.Log(LevelScript.MainGrid.Widht - 1);
+
+        if (NowType == Type.Wall)
+        {
+            if (this.transform.position.x + 15 == 0)
+            {
+                if (this.transform.position.y + 1 <= 0)
+                    LevelScript.MainGrid.BlockGrid[-(int)(this.transform.position.y + 1), (int)this.transform.position.x + 15].AddWall(5);
+                if (this.transform.position.y - 1 >= -LevelScript.MainGrid.Height)
+                    LevelScript.MainGrid.BlockGrid[-(int)(this.transform.position.y - 1), (int)this.transform.position.x + 15].AddWall(0);
+                AddWall(0);
+                AddWall(3);
+                AddWall(5);
+            }
+            if (this.transform.position.x + 15 == (LevelScript.MainGrid.Widht - 1))
+            {
+                if (this.transform.position.y + 1 <= 0)
+                    LevelScript.MainGrid.BlockGrid[-(int)(this.transform.position.y + 1), (int)this.transform.position.x + 15].AddWall(7);
+                if (this.transform.position.y - 1 >= -LevelScript.MainGrid.Height)
+                    LevelScript.MainGrid.BlockGrid[-(int)(this.transform.position.y - 1), (int)this.transform.position.x + 15].AddWall(2);
+                AddWall(2);
+                AddWall(4);
+                AddWall(7);
+            }
+
+            if (this.transform.position.y == -LevelScript.MainGrid.Height)
+            {
+                if (this.transform.position.x + 16 < LevelScript.MainGrid.Widht)
+                    LevelScript.MainGrid.BlockGrid[-(int)(this.transform.position.y), (int)this.transform.position.x + 16].AddWall(5);
+                if (this.transform.position.x + 14 >= 0)
+                    LevelScript.MainGrid.BlockGrid[-(int)(this.transform.position.y), (int)this.transform.position.x + 14].AddWall(7);
+                AddWall(5);
+                AddWall(6);
+                AddWall(7);
+            }
+        }
+
+
         for (int i = 0; i < BlockAro.Length; i++)
         {
             //if (LevelScript.MainGrid.BlockGrid[System.Convert.ToInt16(BlockAro[i].y), System.Convert.ToInt16(BlockAro[i].x)].NowType == Type.Wall)
@@ -166,41 +205,59 @@ public class Block : MonoBehaviour
         {
             if (BlockAro[i].x >= 0 && BlockAro[i].x < LevelScript.MainGrid.Widht && BlockAro[i].y >= 0 && BlockAro[i].y <= LevelScript.MainGrid.Height)
             {
-                if(NowType!=Type.Wall)            
-                switch (i)
-                {
-                    case 0:
-                        if (LevelScript.MainGrid.BlockGrid[System.Convert.ToInt16(BlockAro[i + 3].y), System.Convert.ToInt16(BlockAro[i + 3].x)].NowType == Type.Wall ||
-                            LevelScript.MainGrid.BlockGrid[System.Convert.ToInt16(BlockAro[i + 1].y), System.Convert.ToInt16(BlockAro[i + 1].x)].NowType == Type.Wall ||
-                            LevelScript.MainGrid.BlockGrid[System.Convert.ToInt16(BlockAro[i].y), System.Convert.ToInt16(BlockAro[i].x)].NowType == Type.Wall)
-                            AddWall(i);
-                        break;
-                    case 2:
-                        if (LevelScript.MainGrid.BlockGrid[System.Convert.ToInt16(BlockAro[i - 1].y), System.Convert.ToInt16(BlockAro[i - 1].x)].NowType == Type.Wall ||
-                            LevelScript.MainGrid.BlockGrid[System.Convert.ToInt16(BlockAro[i + 2].y), System.Convert.ToInt16(BlockAro[i + 2].x)].NowType == Type.Wall ||
-                            LevelScript.MainGrid.BlockGrid[System.Convert.ToInt16(BlockAro[i].y), System.Convert.ToInt16(BlockAro[i].x)].NowType == Type.Wall)
-                            AddWall(i);
-                        break;
-                    case 5:
-                        if (LevelScript.MainGrid.BlockGrid[System.Convert.ToInt16(BlockAro[i + 1].y), System.Convert.ToInt16(BlockAro[i + 1].x)].NowType == Type.Wall ||
-                            LevelScript.MainGrid.BlockGrid[System.Convert.ToInt16(BlockAro[i - 2].y), System.Convert.ToInt16(BlockAro[i - 2].x)].NowType == Type.Wall ||
-                            LevelScript.MainGrid.BlockGrid[System.Convert.ToInt16(BlockAro[i].y), System.Convert.ToInt16(BlockAro[i].x)].NowType == Type.Wall)
-                            AddWall(i);
-                        break;
-                    case 7:
-                        if (LevelScript.MainGrid.BlockGrid[System.Convert.ToInt16(BlockAro[i - 1].y), System.Convert.ToInt16(BlockAro[i - 1].x)].NowType == Type.Wall ||
-                            LevelScript.MainGrid.BlockGrid[System.Convert.ToInt16(BlockAro[i - 3].y), System.Convert.ToInt16(BlockAro[i - 3].x)].NowType == Type.Wall ||
-                            LevelScript.MainGrid.BlockGrid[System.Convert.ToInt16(BlockAro[i].y), System.Convert.ToInt16(BlockAro[i].x)].NowType == Type.Wall)
-                            AddWall(i);
-
-                        break;
-                    default:
-                        if (LevelScript.MainGrid.BlockGrid[System.Convert.ToInt16(BlockAro[i].y), System.Convert.ToInt16(BlockAro[i].x)].NowType == Type.Wall)
-                            if (LevelScript.MainGrid.BlockGrid[System.Convert.ToInt16(BlockAro[i].y), System.Convert.ToInt16(BlockAro[i].x)].NowType != NowType)
+                if (NowType != Type.Wall)
+                    switch (i)
+                    {
+                        case 0:
+                            if (LevelScript.MainGrid.BlockGrid[System.Convert.ToInt16(BlockAro[i + 3].y), System.Convert.ToInt16(BlockAro[i + 3].x)].NowType == Type.Wall ||
+                                LevelScript.MainGrid.BlockGrid[System.Convert.ToInt16(BlockAro[i + 1].y), System.Convert.ToInt16(BlockAro[i + 1].x)].NowType == Type.Wall ||
+                                LevelScript.MainGrid.BlockGrid[System.Convert.ToInt16(BlockAro[i].y), System.Convert.ToInt16(BlockAro[i].x)].NowType == Type.Wall)
                                 AddWall(i);
-                        break;
+                            break;
+                        case 2:
+                            if (LevelScript.MainGrid.BlockGrid[System.Convert.ToInt16(BlockAro[i - 1].y), System.Convert.ToInt16(BlockAro[i - 1].x)].NowType == Type.Wall ||
+                                LevelScript.MainGrid.BlockGrid[System.Convert.ToInt16(BlockAro[i + 2].y), System.Convert.ToInt16(BlockAro[i + 2].x)].NowType == Type.Wall ||
+                                LevelScript.MainGrid.BlockGrid[System.Convert.ToInt16(BlockAro[i].y), System.Convert.ToInt16(BlockAro[i].x)].NowType == Type.Wall)
+                                AddWall(i);
+                            break;
+                        case 5:
+                            if (LevelScript.MainGrid.BlockGrid[System.Convert.ToInt16(BlockAro[i + 1].y), System.Convert.ToInt16(BlockAro[i + 1].x)].NowType == Type.Wall ||
+                                LevelScript.MainGrid.BlockGrid[System.Convert.ToInt16(BlockAro[i - 2].y), System.Convert.ToInt16(BlockAro[i - 2].x)].NowType == Type.Wall ||
+                                LevelScript.MainGrid.BlockGrid[System.Convert.ToInt16(BlockAro[i].y), System.Convert.ToInt16(BlockAro[i].x)].NowType == Type.Wall)
+                                AddWall(i);
+                            break;
+                        case 7:
+                            if (LevelScript.MainGrid.BlockGrid[System.Convert.ToInt16(BlockAro[i - 1].y), System.Convert.ToInt16(BlockAro[i - 1].x)].NowType == Type.Wall ||
+                                LevelScript.MainGrid.BlockGrid[System.Convert.ToInt16(BlockAro[i - 3].y), System.Convert.ToInt16(BlockAro[i - 3].x)].NowType == Type.Wall ||
+                                LevelScript.MainGrid.BlockGrid[System.Convert.ToInt16(BlockAro[i].y), System.Convert.ToInt16(BlockAro[i].x)].NowType == Type.Wall)
+                                AddWall(i);
+
+                            break;
+                        default:
+                            if (LevelScript.MainGrid.BlockGrid[System.Convert.ToInt16(BlockAro[i].y), System.Convert.ToInt16(BlockAro[i].x)].NowType == Type.Wall)
+                                if (LevelScript.MainGrid.BlockGrid[System.Convert.ToInt16(BlockAro[i].y), System.Convert.ToInt16(BlockAro[i].x)].NowType != NowType)
+                                    AddWall(i);
+                            break;
+
+                    }
+            }
+            else
+            {
+                if (BlockAro[i].x < 0)
+                {
 
                 }
+                else if (BlockAro[i].x < LevelScript.MainGrid.Widht)
+                {
+
+                }
+                else if (BlockAro[i].y >= 0)
+                {
+                }
+                else if (BlockAro[i].y <= LevelScript.MainGrid.Height)
+                {
+                }
+
             }
             /* if (i == 1 || i == 3 || i == 6 || i == 8)
              {
