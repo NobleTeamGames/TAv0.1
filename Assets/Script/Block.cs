@@ -7,6 +7,7 @@ public class Block : MonoBehaviour
     protected SpriteRenderer[] TextureBlock;
     public enum Type { Front, Back, Wall, Resource }
     public Type NowType;
+
     // Use this for initialization
     protected void Start()
     {
@@ -16,6 +17,21 @@ public class Block : MonoBehaviour
         TextureBlock[1] = gameObject.transform.GetChild(1).GetComponent<SpriteRenderer>();
         TextureBlock[2] = gameObject.transform.GetChild(2).GetComponent<SpriteRenderer>();
         TextureBlock[3] = gameObject.transform.GetChild(3).GetComponent<SpriteRenderer>();
+        if (gameObject.transform.position.y == 0)
+        {
+            TextureBlock[0].color = new Color(0.3f, 0.3f, 0.3f);
+            TextureBlock[1].color = new Color(0.3f, 0.3f, 0.3f);
+            TextureBlock[2].color = new Color(0.05f, 0.05f, 0.05f);
+            TextureBlock[3].color = new Color(0.05f, 0.05f, 0.05f);
+        }
+        else
+        {
+            TextureBlock[0].color = new Color(0.05f, 0.05f, 0.05f);
+            TextureBlock[1].color = new Color(0.05f, 0.05f, 0.05f);
+            TextureBlock[2].color = new Color(0.05f, 0.05f, 0.05f);
+            TextureBlock[3].color = new Color(0.05f, 0.05f, 0.05f);
+        }
+
     }
 
     // Update is called once per frame
@@ -34,14 +50,31 @@ public class Block : MonoBehaviour
             TextureBlock[2].color = new Color(0.5f, 0.5f, 0.5f);
             TextureBlock[3].color = new Color(0.5f, 0.5f, 0.5f);
             UpdateWall();
+
+            Vector2[] BlockAro = new Vector2[8];
+            BlockAro = BlocksArownd();
+
+            for (int i = 0; i < BlockAro.Length; i++)
+            {
+                if (BlockAro[i].x >= 0 && BlockAro[i].x < LevelScript.MainGrid.Widht && BlockAro[i].y >= 0 && BlockAro[i].y <= LevelScript.MainGrid.Height)
+                {
+                    LevelScript.MainGrid.BlockGrid[System.Convert.ToInt16(BlockAro[i].y), System.Convert.ToInt16(BlockAro[i].x)].UpdateLight();
+                }
+            }
             //BlocksArownd(new Vector2(gameObject.transform.position.x + 15, gameObject.transform.position.y));
         }
     }
 
     public void ChangeWall()
     {
+        //UpdateLight();
+        
         if (NowType == Type.Back)
         {
+            /*TextureBlock[0].color = new Color(0.5f, 0.5f, 0.5f);
+            TextureBlock[1].color = new Color(0.5f, 0.5f, 0.5f);
+            TextureBlock[2].color = new Color(0.5f, 0.5f, 0.5f);
+            TextureBlock[3].color = new Color(0.5f, 0.5f, 0.5f);*/
             Sprite[] AllSprite = new Sprite[9];
             AllSprite = Resources.LoadAll<Sprite>("Sprites/Atlas/terrain");
             TextureBlock[0].sprite = AllSprite[6];
@@ -56,11 +89,19 @@ public class Block : MonoBehaviour
             {
                 if (BlockAro[i].x >= 0 && BlockAro[i].x < LevelScript.MainGrid.Widht && BlockAro[i].y >= 0 && BlockAro[i].y <= LevelScript.MainGrid.Height)
                 {
+
                     if (LevelScript.MainGrid.BlockGrid[System.Convert.ToInt16(BlockAro[i].y), System.Convert.ToInt16(BlockAro[i].x)].NowType != Type.Back)
+                    {
                         LevelScript.MainGrid.BlockGrid[System.Convert.ToInt16(BlockAro[i].y), System.Convert.ToInt16(BlockAro[i].x)].SetWall();
+
+                        LevelScript.MainGrid.BlockGrid[System.Convert.ToInt16(BlockAro[i].y), System.Convert.ToInt16(BlockAro[i].x)].UpdateLight();
+                    }
+
+                    
                 }
             }
             UpdateWall();
+           // UpdateLight();
         }
         
     }
@@ -85,7 +126,7 @@ public class Block : MonoBehaviour
         }
     }
 
-    private Vector2[] BlocksArownd()
+    protected Vector2[] BlocksArownd()
     {
         /*
          * 
@@ -94,6 +135,8 @@ public class Block : MonoBehaviour
          * [4][ ][5]
          * [6][7][8]
          * 
+         * 
+         * Нужен учет, если за границей
          * */
         //DestroyBlock();
         Vector2[] BlockArw = new Vector2[8];
@@ -200,12 +243,63 @@ public class Block : MonoBehaviour
 
     }
 
-    public void Col()
+    public virtual void UpdateLight()
     {
-        TextureBlock[0].color = new Color(0.1f, 0.5f, 0.5f);
-        TextureBlock[1].color = new Color(0.5f, 0.1f, 0.5f);
-        TextureBlock[2].color = new Color(0.5f, 0.5f, 0.1f);
-        TextureBlock[3].color = new Color(0.5f, 0.1f, 0.5f);
+       
+        if (NowType == Type.Front)
+        {
+            Vector2[] BlockAro = new Vector2[8];
+            BlockAro = BlocksArownd();
+            for (int i = 0; i < BlockAro.Length; i++)
+            {
+                if (BlockAro[i].y < 0)
+                {
+
+                    TextureBlock[0].color = new Color(0.3f, 0.3f, 0.3f);
+                    TextureBlock[1].color = new Color(0.3f, 0.3f, 0.3f);
+                }
+
+                if (BlockAro[i].x >= 0 && BlockAro[i].x < LevelScript.MainGrid.Widht && BlockAro[i].y >= 0 && BlockAro[i].y <= LevelScript.MainGrid.Height)
+                {
+                    if (LevelScript.MainGrid.BlockGrid[System.Convert.ToInt16(BlockAro[i].y), System.Convert.ToInt16(BlockAro[i].x)].NowType == Type.Back || LevelScript.MainGrid.BlockGrid[System.Convert.ToInt16(BlockAro[i].y), System.Convert.ToInt16(BlockAro[i].x)].NowType == Type.Wall)
+                    {
+                        switch (i)
+                        {
+                            case 0:
+                                TextureBlock[1].color = new Color(0.3f, 0.3f, 0.3f);
+                                break;
+                            case 2:
+                                TextureBlock[0].color = new Color(0.3f, 0.3f, 0.3f);
+                                break;
+                            case 5:
+                                TextureBlock[2].color = new Color(0.3f, 0.3f, 0.3f);
+                                break;
+                            case 7:
+                                TextureBlock[3].color = new Color(0.3f, 0.3f, 0.3f);
+                                break;
+                            case 1:
+                                TextureBlock[0].color = new Color(0.3f, 0.3f, 0.3f);
+                                TextureBlock[1].color = new Color(0.3f, 0.3f, 0.3f);
+                                break;
+                            case 3:
+                                TextureBlock[1].color = new Color(0.3f, 0.3f, 0.3f);
+                                TextureBlock[2].color = new Color(0.3f, 0.3f, 0.3f);
+                                break;
+                            case 4:
+                                TextureBlock[0].color = new Color(0.3f, 0.3f, 0.3f);
+                                TextureBlock[3].color = new Color(0.3f, 0.3f, 0.3f);
+                                break;
+                            case 6:
+                                TextureBlock[2].color = new Color(0.3f, 0.3f, 0.3f);
+                                TextureBlock[3].color = new Color(0.3f, 0.3f, 0.3f);
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                }
+            }
+        }
     }
     
 }

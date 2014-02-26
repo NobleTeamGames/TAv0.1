@@ -36,10 +36,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 100000}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8579b312a4aa24c4c8097ac868884c8c, type: 3}
+  m_Script: {fileID: 11500000, guid: 2a301088daa9ebd4995b6b8fd77daa4d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SecondsWait: 5
+  SecondsWait: 10
+  MaxHealth: 0
+  MaxArmor: 0
 --- !u!212 &21200000
 SpriteRenderer:
   m_ObjectHideFlags: 1
