@@ -103,7 +103,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3f354b13050d3094cb99940bedd5b205, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Difficalt: .899999976
+  Difficalt: .100000001
 --- !u!4 &426115686
 Transform:
   m_ObjectHideFlags: 0
@@ -302,7 +302,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 11400000, guid: 1bd4a3bb257267a4f82b16834e885813, type: 2}
       propertyPath: Difficalt
-      value: .899999976
+      value: .100000001
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 1bd4a3bb257267a4f82b16834e885813, type: 2}

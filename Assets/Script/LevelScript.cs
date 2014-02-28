@@ -12,6 +12,7 @@ public  class LevelScript : MonoBehaviour {
        // Difficalt = 0.9f;
         GameObject GridObject = Instantiate(Resources.Load("Prefab/Grid", typeof(GameObject))) as GameObject;
         MainGrid = GridObject.GetComponent<Grid>();
+       
         MainGrid.GenarateGrid(Type, Difficalt);
        
 	}

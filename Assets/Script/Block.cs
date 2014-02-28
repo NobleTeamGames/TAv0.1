@@ -17,7 +17,7 @@ public class Block : MonoBehaviour
         TextureBlock[1] = gameObject.transform.GetChild(1).GetComponent<SpriteRenderer>();
         TextureBlock[2] = gameObject.transform.GetChild(2).GetComponent<SpriteRenderer>();
         TextureBlock[3] = gameObject.transform.GetChild(3).GetComponent<SpriteRenderer>();
-        if (gameObject.transform.position.y == 0)
+       /* if (gameObject.transform.position.y == 0)
         {
             TextureBlock[0].color = new Color(0.3f, 0.3f, 0.3f);
             TextureBlock[1].color = new Color(0.3f, 0.3f, 0.3f);
@@ -30,7 +30,7 @@ public class Block : MonoBehaviour
             TextureBlock[1].color = new Color(0.05f, 0.05f, 0.05f);
             TextureBlock[2].color = new Color(0.05f, 0.05f, 0.05f);
             TextureBlock[3].color = new Color(0.05f, 0.05f, 0.05f);
-        }
+        }*/
 
     }
 
@@ -42,7 +42,27 @@ public class Block : MonoBehaviour
 
     public void DestroyBlock()
     {
-        if (NowType == Type.Front)
+        bool near = false;
+        Vector2[] BlockAro = new Vector2[8];
+        BlockAro = BlocksArownd();
+        for (int i = 0; i < BlockAro.Length; i++)
+        {
+            if (BlockAro[i].x >= 0 && BlockAro[i].x < LevelScript.MainGrid.Widht && BlockAro[i].y >= 0 && BlockAro[i].y <= LevelScript.MainGrid.Height)
+            {
+                if (LevelScript.MainGrid.BlockGrid[System.Convert.ToInt16(BlockAro[i].y), System.Convert.ToInt16(BlockAro[i].x)].NowType == Type.Back ||
+                    LevelScript.MainGrid.BlockGrid[System.Convert.ToInt16(BlockAro[i].y), System.Convert.ToInt16(BlockAro[i].x)].NowType == Type.Wall)
+                {
+                    near = true;
+                    break;
+                }
+            }
+            else
+            {
+                near = true;
+                break;
+            }
+        }
+        if (NowType == Type.Front && near)
         {
             NowType = Type.Back;
             TextureBlock[0].color = new Color(0.5f, 0.5f, 0.5f);
@@ -51,7 +71,6 @@ public class Block : MonoBehaviour
             TextureBlock[3].color = new Color(0.5f, 0.5f, 0.5f);
             UpdateWall();
 
-            Vector2[] BlockAro = new Vector2[8];
             BlockAro = BlocksArownd();
 
             for (int i = 0; i < BlockAro.Length; i++)
@@ -150,6 +169,14 @@ public class Block : MonoBehaviour
                 AddWall(5);
                 AddWall(6);
                 AddWall(7);
+            }
+            if (this.transform.position.y == 0)
+            {
+                if (this.transform.position.x + 16 < LevelScript.MainGrid.Widht)
+                    LevelScript.MainGrid.BlockGrid[-(int)(this.transform.position.y), (int)this.transform.position.x + 16].AddWall(0);
+                
+                if (this.transform.position.x + 14 >= 0)
+                    LevelScript.MainGrid.BlockGrid[-(int)(this.transform.position.y), (int)this.transform.position.x + 14].AddWall(2);               
             }
         }
 

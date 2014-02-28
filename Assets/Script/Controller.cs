@@ -79,7 +79,7 @@ public class Controller : MonoBehaviour {
 
                 if (Input.GetMouseButtonUp(0) && Time.time - StartClickTime <= 0.15f && NowClic)
                 {
-
+                    
                     if (Convert.ToInt16(-StartVec2.y) <= LevelScript.MainGrid.Height && Convert.ToInt16(-StartVec2.y) >= 0)
                     {
                         //LevelScript.MainGrid.BlockGrid[Convert.ToInt16(-StartVec2.y), Convert.ToInt16(StartVec2.x) + 15].BlocksArownd(new Vector2(Convert.ToInt16(-StartVec2.y), Convert.ToInt16(StartVec2.x) + 15));
