@@ -17,7 +17,7 @@ public class Block : MonoBehaviour
         TextureBlock[1] = gameObject.transform.GetChild(1).GetComponent<SpriteRenderer>();
         TextureBlock[2] = gameObject.transform.GetChild(2).GetComponent<SpriteRenderer>();
         TextureBlock[3] = gameObject.transform.GetChild(3).GetComponent<SpriteRenderer>();
-       /* if (gameObject.transform.position.y == 0)
+        if (gameObject.transform.position.y == 0)
         {
             TextureBlock[0].color = new Color(0.3f, 0.3f, 0.3f);
             TextureBlock[1].color = new Color(0.3f, 0.3f, 0.3f);
@@ -30,7 +30,7 @@ public class Block : MonoBehaviour
             TextureBlock[1].color = new Color(0.05f, 0.05f, 0.05f);
             TextureBlock[2].color = new Color(0.05f, 0.05f, 0.05f);
             TextureBlock[3].color = new Color(0.05f, 0.05f, 0.05f);
-        }*/
+        }
 
     }
 
@@ -58,8 +58,11 @@ public class Block : MonoBehaviour
             }
             else
             {
-                near = true;
-                break;
+                if (BlockAro[i].y < 0)
+                {
+                    near = true;
+                    break;
+                }
             }
         }
         if (NowType == Type.Front && near)

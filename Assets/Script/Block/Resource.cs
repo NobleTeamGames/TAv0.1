@@ -12,12 +12,12 @@ public class Resource : Block
         base.Start();
         NowType = Type.Resource;
         Sprite[] AllSprite = new Sprite[9];
-       /* AllSprite = Resources.LoadAll<Sprite>("Sprites/Atlas/terrain");
+        AllSprite = Resources.LoadAll<Sprite>("Sprites/Atlas/terrain");
         TextureBlock[0].sprite = AllSprite[7];
         TextureBlock[1].sprite = AllSprite[7];
         TextureBlock[2].sprite = AllSprite[7];
-        TextureBlock[3].sprite = AllSprite[7];*/
-        /*TextureBlock[0].color = new Color(0.3f, 0.05f, 0.05f);
+        TextureBlock[3].sprite = AllSprite[7];
+       /* TextureBlock[0].color = new Color(0.3f, 0.05f, 0.05f);
         TextureBlock[1].color = new Color(0.3f, 0.05f, 0.05f);
         TextureBlock[2].color = new Color(0.05f, 0.3f, 0.05f);
         TextureBlock[3].color = new Color(0.05f, 0.05f, 0.3f);*/
