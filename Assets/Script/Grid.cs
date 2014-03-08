@@ -13,26 +13,28 @@ public class Grid : MonoBehaviour
     public int Widht;
     public Block[,] BlockGrid;
     public Resource[] TreesGrid;
-    public int Indent = 2;
+    public int Indent = 3;
 
 
-    private GameObject Background;
+    private Background _Background;
 
     // Use this for initialization
     void Start()
     {
-        Background = Instantiate(Resources.Load("Prefab/Forest"), new Vector3(0, 2.5f, 0), Quaternion.identity) as GameObject;     
+            
     }
 
     // Update is called once per frame
     void Update()
     {
-        Background.transform.position = new Vector3(Camera.main.transform.position.x, 2.5f, 0f);
+       // Background.transform.position = new Vector3(Camera.main.transform.position.x, 2.5f, 0f);
     }
 
     public void GenarateGrid(string Type ,float Difficalt)
     {
-
+       // Background = Instantiate(Resources.Load("Prefab/Forest"), new Vector3(0, 2.5f, 0), Quaternion.identity) as GameObject; 
+        _Background = Camera.main.transform.FindChild("Background").GetComponent<Background>();
+        //
         float Rand = 0f;                                        //Рандомная величина
         GameObject Now;                                        //Переменная для поиска спаунящегося блока
 
@@ -47,9 +49,12 @@ public class Grid : MonoBehaviour
         Height = Convert.ToInt16(Stats.GetAttribute("height"));
         Widht = Convert.ToInt16(Stats.GetAttribute("width"));
 
+        int CountBack = Convert.ToInt16(xmlDoc.DocumentElement.SelectSingleNode("//Background").Attributes[0].Value);
+
+        //string Str = ;
+        _Background.SetUpBackGround(Resources.Load<Sprite>("Sprites/Back/" + Type + "/" + UnityEngine.Random.Range(1, CountBack + 1)));
         List<Vector2> TreesCoords = new List<Vector2>();
         int IndentTree = Convert.ToInt16(xmlDoc.DocumentElement.SelectSingleNode("//Tree").Attributes[0].Value);
-
         BlockGrid = new Block[Height + 2, Widht];
        // BlockGrid[0, 30] = new Block();
         
@@ -162,7 +167,7 @@ public class Grid : MonoBehaviour
             }
         GenerateTree(TreesCoords);
         GenerateZone();
-
+        _Background.gameObject.SetActive(true);
         
     }
 

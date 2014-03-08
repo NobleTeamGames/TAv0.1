@@ -11,7 +11,9 @@ public class Controller : MonoBehaviour {
     private GameObject Frame;
     private LevelScript LS;
 
-    public enum Action { Nothing, SetWall, Remove }
+    private GameObject BildingObject;
+    private Camera UICam;
+    public enum Action { Nothing, SetWall, Remove, Bilding }
     public Action NowAction;
 	// Use this for initialization
 	void Start () {
@@ -22,29 +24,48 @@ public class Controller : MonoBehaviour {
         CameraControls = Camera.main.GetComponent<CameraController>();
         LS = this.gameObject.GetComponentInChildren<LevelScript>();
         NowClic = false;
-
+        UICam = NGUITools.FindCameraForLayer(8);
+       // Debug.Log(UICam.name);
 	}
 	
 	// Update is called once per frame
 	void Update () {
-        if (Input.GetKeyDown(KeyCode.R))
-            if (NowAction == Action.Remove)
-                NowAction = Action.Nothing;
-            else
+
+
+       Ray ray = UICam.ScreenPointToRay(Input.mousePosition);
+       RaycastHit hit;
+ 
+       // Raycast
+      
+       if (Physics.Raycast(ray,out hit))
+       {
+           //Debug.DrawRay(ray.origin, ray.direction);
+           Debug.Log(hit.collider.gameObject.layer);
+           Destroy(hit.collider.gameObject);
+           /* if (hit.transform.gameObject.layer == LayerGround) {
+             Debug.Log("Ground");
+             // Make a path
+            } else {
+             Debug.Log("Other Objects");
+             // Do whatever you want*/
+       }
+
+        if (NowAction == Action.Bilding)
+        {
+            if(Frame.active)
+                Frame.SetActive(false);
+
+            if (BildingObject == null || BildingObject.GetComponent<Sawmill>()._builded)
             {
-                if (NowAction == Action.SetWall)
-                    Frame.SetActive(false);
-                NowAction = Action.Remove;
+                NowAction = Action.Nothing;
+                BildingObject = null;
             }
 
-        if(Input.GetKeyDown(KeyCode.W))
-            if (NowAction == Action.SetWall)
-            {
-                Frame.SetActive(false);
-                NowAction = Action.Nothing;
-            }
-            else
-                NowAction = Action.SetWall;
+            
+        }
+
+
+            
 
         switch (NowAction)
         {
@@ -59,6 +80,50 @@ public class Controller : MonoBehaviour {
         }
     
 	}
+
+
+   /* void OnGUI()
+    {
+        if (GUI.Button(new Rect(10, 30, 150, 20), "Удалить блок"))
+        {
+            if (NowAction == Action.Remove)
+                NowAction = Action.Nothing;
+            else
+            {
+                if (NowAction == Action.SetWall)
+                    Frame.SetActive(false);
+                NowAction = Action.Remove;
+            }
+        }
+
+        if (GUI.Button(new Rect(160, 30, 150, 20), "Установить стену"))
+        {
+            if (NowAction == Action.SetWall)
+            {
+                Frame.SetActive(false);
+                NowAction = Action.Nothing;
+            }
+            else
+                NowAction = Action.SetWall;
+        }
+
+        if (GUI.Button(new Rect(310, 30, 150, 20), "Добавить Здание"))
+        {
+            if (BildingObject == null)
+            {
+                NowAction = Action.Bilding;
+                BildingObject = Instantiate(Resources.Load("Prefab/SawMill Fabric")) as GameObject;
+                BildingObject.name = "Sawmill";
+                BildingObject.transform.parent = GameObject.Find("Gamer").transform;
+            }
+            else
+            {
+                Destroy(BildingObject);
+                BildingObject = null;
+            }
+        }
+    
+    }*/
 
     private void Remove()
     {
@@ -99,11 +164,15 @@ public class Controller : MonoBehaviour {
 
     private void SetWall()
     {
+       
         SetWallVect = new Vector2(Convert.ToInt16(Camera.main.ScreenToWorldPoint(Input.mousePosition).x), Convert.ToInt16(Camera.main.ScreenToWorldPoint(Input.mousePosition).y));
         if(!Frame.active)
             Frame.SetActive(true);
         if (new Vector2(Frame.transform.position.x, Frame.transform.position.y) != SetWallVect)
+        {
+            //Frame.transform.position = Vector3.Lerp(Frame.transform.position, new Vector3(SetWallVect.x, SetWallVect.y, 0), 10f);
             Frame.transform.position = new Vector3(SetWallVect.x, SetWallVect.y, 0);
+        }
 
         if (Input.GetMouseButtonDown(0))
         {
@@ -133,5 +202,39 @@ public class Controller : MonoBehaviour {
 
         }
 
+    }
+
+    public void Exit()
+    {
+        Debug.Log(this.gameObject.name);
+        Application.Quit();
+    }
+
+    public void OnButtonClick(GameObject itemGO)
+    {
+        Debug.Log(itemGO.name);
+    }
+
+    public void SetRemove()
+    {
+        if (NowAction == Action.Remove)
+            NowAction = Action.Nothing;
+        else
+        {
+            if (NowAction == Action.SetWall)
+                Frame.SetActive(false);
+            NowAction = Action.Remove;
+        }
+    }
+
+    public void SetWalls()
+    {
+        if (NowAction == Action.SetWall)
+        {
+            Frame.SetActive(false);
+            NowAction = Action.Nothing;
+        }
+        else
+            NowAction = Action.SetWall;
     }
 }

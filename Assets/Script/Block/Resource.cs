@@ -51,7 +51,6 @@ public class Resource : Block
         {
             if (BlockAro[i].y < 0)
             {
-
                 TextureBlock[0].color = new Color(0.3f, 0.3f, 0.3f);
                 TextureBlock[1].color = new Color(0.3f, 0.3f, 0.3f);
             }

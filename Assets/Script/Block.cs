@@ -45,6 +45,7 @@ public class Block : MonoBehaviour
         bool near = false;
         Vector2[] BlockAro = new Vector2[8];
         BlockAro = BlocksArownd();
+
         for (int i = 0; i < BlockAro.Length; i++)
         {
             if (BlockAro[i].x >= 0 && BlockAro[i].x < LevelScript.MainGrid.Widht && BlockAro[i].y >= 0 && BlockAro[i].y <= LevelScript.MainGrid.Height)
@@ -65,9 +66,33 @@ public class Block : MonoBehaviour
                 }
             }
         }
+
+        if (near)
+        {
+            //// ÇÀÌÅÍÈÒ!!!! ////
+            /*
+             * 
+             * Î÷åíü ïëîõî
+             * 
+             * */
+
+            for (int x = -2; x <= 2; x++)
+            {
+                foreach (var Cild in GameObject.Find("Gamer").transform.GetChild(0))
+                {
+
+                    if ((Cild as Transform).position == new Vector3(gameObject.transform.position.x + x, gameObject.transform.position.y + 1, 0))
+                    {                       
+                        near = false;
+                    }
+                }
+            }
+        }
+
         if (NowType == Type.Front && near)
         {
             NowType = Type.Back;
+            //TextureBlock[0].color = Color.Lerp(TextureBlock[0].color, new Color(0.5f, 0.5f, 0.5f), 0.1f);
             TextureBlock[0].color = new Color(0.5f, 0.5f, 0.5f);
             TextureBlock[1].color = new Color(0.5f, 0.5f, 0.5f);
             TextureBlock[2].color = new Color(0.5f, 0.5f, 0.5f);
@@ -175,10 +200,11 @@ public class Block : MonoBehaviour
             }
             if (this.transform.position.y == 0)
             {
-                if (this.transform.position.x + 16 < LevelScript.MainGrid.Widht)
+
+                if (this.transform.position.x + 16 < LevelScript.MainGrid.Widht && LevelScript.MainGrid.BlockGrid[-(int)(this.transform.position.y), (int)this.transform.position.x + 16].NowType == Type.Front)
                     LevelScript.MainGrid.BlockGrid[-(int)(this.transform.position.y), (int)this.transform.position.x + 16].AddWall(0);
-                
-                if (this.transform.position.x + 14 >= 0)
+
+                if (this.transform.position.x + 14 >= 0 && LevelScript.MainGrid.BlockGrid[-(int)(this.transform.position.y), (int)this.transform.position.x + 14].NowType == Type.Front)
                     LevelScript.MainGrid.BlockGrid[-(int)(this.transform.position.y), (int)this.transform.position.x + 14].AddWall(2);               
             }
         }

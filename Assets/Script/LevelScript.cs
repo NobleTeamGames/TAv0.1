@@ -3,7 +3,7 @@ using System.Collections;
 
 public  class LevelScript : MonoBehaviour {
 
-    public static string Type = "Level";
+    public static string Type = "Forest";
     public static Grid MainGrid;
     public float Difficalt;
 	// Use this for initialization
@@ -19,6 +19,7 @@ public  class LevelScript : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        
+
+       
 	}
 }

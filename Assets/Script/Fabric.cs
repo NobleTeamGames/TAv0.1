@@ -1,9 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
-using Mod = Assets.Model;
 using System.Timers;
 using System;
-using Assets.Utilities;
 
 public class Fabric : MonoBehaviour {
 
@@ -13,15 +11,15 @@ public class Fabric : MonoBehaviour {
     public int HeightGabarits = 2;
     public int WidhtGabarits = 3;
     public int ResourseZone=1;
+    public string FoundingResourse;
 
-    private Mod.Resource _plus = new Mod.Resource(5, 0, 0, 0, 0, 0, 0);
+    private int ResourseArownd;
     private int _worker;
     private GamerStatistick _stat;
-    private bool _builded = false;
+    public bool _builded = false;
     private bool NowClic;
     private float StartClickTime;
-    private Timer _startTimer;
-    private Mod.Resource _price = new Mod.Resource(0, 0, 100, 0, 0, 300, 0);
+    private Timer _startTimer;  
     private int _health;
     private int _armor;
 
@@ -40,8 +38,8 @@ public class Fabric : MonoBehaviour {
     {
         if (_builded)
             return;
-
-        CreateBilding();
+        else
+            CreateBilding();
 
     }
 
@@ -56,20 +54,21 @@ public class Fabric : MonoBehaviour {
         {*/
        // if(gameObject.transform.parent.transform.childCount>0)
         foreach (var Cild in gameObject.transform.parent.GetChild(0))
+        {
+            // Debug.Log((Cild as Transform).position);
+            if ((Cild as Transform).position == gameObject.transform.position)
             {
-               // Debug.Log((Cild as Transform).position);
-                if ((Cild as Transform).position == gameObject.transform.position)
-                {
-                    CanBild = false;
-                }
+                CanBild = false;
             }
-        if(CanBild)
+        }
+        if (CanBild)
+        {
             for (int y = 0; y < HeightGabarits; y++)
             {
-               // Debug.Log("1");
-                for (int x = -1; x < WidhtGabarits-1; x++)
+                // Debug.Log("1");
+                for (int x = -1; x < WidhtGabarits - 1; x++)
                 {
-                    //Проверь на верхний игрик
+
                     if (-newPosition.y - y >= 0 && -newPosition.y - y <= LevelScript.MainGrid.Height && newPosition.x + x + 15 >= 0 && newPosition.x + x + 15 < LevelScript.MainGrid.Widht)
                     {
                         //Debug.Log((Convert.ToInt16(-newPosition.y) - y) + "," + (Convert.ToInt16(newPosition.x) + x + 15));
@@ -88,6 +87,21 @@ public class Fabric : MonoBehaviour {
                         break;
                 }
             }
+            for (int x = -1; x < WidhtGabarits - 1; x++)
+            {
+                if (-newPosition.y +1 >= 0 && -newPosition.y +1 <= LevelScript.MainGrid.Height && newPosition.x + x + 15 >= 0 && newPosition.x + x + 15 < LevelScript.MainGrid.Widht)
+                {
+
+                    if (LevelScript.MainGrid.BlockGrid[Convert.ToInt16(-newPosition.y) + 1, Convert.ToInt16(newPosition.x) + x + 15].NowType == Block.Type.Back || LevelScript.MainGrid.BlockGrid[Convert.ToInt16(-newPosition.y) + 1, Convert.ToInt16(newPosition.x) + x + 15].NowType == Block.Type.Wall)
+                    {
+                        CanBild = false;
+                        break;
+                    }
+                }
+                
+            }
+
+        }
 
             if (CanBild)
                 gameObject.GetComponent<SpriteRenderer>().color = new Color(0.1f, 1f, 0.3f);
@@ -114,12 +128,13 @@ public class Fabric : MonoBehaviour {
             {
                 this.gameObject.transform.parent = this.gameObject.transform.parent.GetChild(0);
                 gameObject.GetComponent<SpriteRenderer>().color = new Color(1f, 1f, 1f);
-                _stat.MinusPrice(_price);
-                _startTimer.Start();
+               // _stat.MinusPrice(_price);
+               // _startTimer.Start();
                 _builded = true;
-                _plus.Multiply(_worker);
+               // _plus.Multiply(_worker);
                 NowClic = false;
-                Debug.Log(CalculateResourse());
+                ResourseArownd = CalculateResourse();
+               
             }
             else
                 Destroy(gameObject);
@@ -140,7 +155,8 @@ public class Fabric : MonoBehaviour {
                     if ((gameObject.transform.position.x + x) + 15 < LevelScript.MainGrid.Widht && (gameObject.transform.position.x + x) + 15 >= 0)
                     {
                         if (LevelScript.MainGrid.BlockGrid[-((int)gameObject.transform.position.y + y), ((int)gameObject.transform.position.x + x + 15)].NowType == Block.Type.Resource)
-                            ResCol++;
+                            if (LevelScript.MainGrid.BlockGrid[-((int)gameObject.transform.position.y + y), ((int)gameObject.transform.position.x + x + 15)].name == FoundingResourse + "(Clone)")
+                                ResCol++;
                        // Debug.Log(-(gameObject.transform.position.y + y) + ";" + (gameObject.transform.position.x + x));
                        // if(
                     }
@@ -150,9 +166,9 @@ public class Fabric : MonoBehaviour {
         return ResCol;
 
     }
-    void ReCalculate()
+    private void ReCalculate()
     {
-        _stat.SetResources(_plus);
+      //  _stat.SetResources(_plus);
     }
 
     public void AddHealth(int heal)
@@ -181,7 +197,7 @@ public class Fabric : MonoBehaviour {
             _health = 0;
 
     }
-     public void RemArmor(int damage)
+    public void RemArmor(int damage)
     {
         if (_armor > damage)
             _armor -= damage;

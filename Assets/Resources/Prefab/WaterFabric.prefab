@@ -44,6 +44,9 @@ MonoBehaviour:
   MaxArmor: 0
   HeightGabarits: 2
   WidhtGabarits: 3
+  ResourseZone: 1
+  FoundingResourse: Water
+  _builded: 0
 --- !u!212 &21200000
 SpriteRenderer:
   m_ObjectHideFlags: 1

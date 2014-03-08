@@ -36,12 +36,13 @@ public class CameraController : MonoBehaviour {
     void Start()
     {
 
-        TextAsset xmlAsset = Resources.Load("LevelStats/Level") as TextAsset; //Считываня xml
+        TextAsset xmlAsset = Resources.Load("LevelStats/"+LevelScript.Type) as TextAsset; //Считываня xml
         XmlDocument xmlDoc = new XmlDocument();
         if (xmlAsset)
             xmlDoc.LoadXml(xmlAsset.text);
 
         XmlElement Stats = (XmlElement)xmlDoc.DocumentElement.SelectSingleNode("Location");
+
         MaxHeight = -(Convert.ToInt16(Stats.GetAttribute("height")) + 0.5f);
         MaxWidht = Convert.ToInt16(Stats.GetAttribute("width")) / 2f + 0.5f;
 
